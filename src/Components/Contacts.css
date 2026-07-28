@@ -1,0 +1,279 @@
+.Contacts_Container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 75px);
+  width: 30%;
+  min-width: 280px;
+  background: var(--bgColor);
+  border-right: 1px solid var(--borderColor);
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.Contacts_Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  flex-shrink: 0;
+  background: var(--bgColor);
+  border-bottom: 1px solid var(--borderColor);
+  position: relative;
+}
+
+.Contacts_Header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 24px;
+  right: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primaryColor), var(--accentColor));
+  opacity: 0.3;
+  border-radius: 2px;
+}
+
+.Contacts_Header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--textColor);
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.Contacts_Header h2::before {
+  content: '👥';
+  font-size: 20px;
+  opacity: 0.7;
+}
+
+.Contact_Count {
+  background: linear-gradient(135deg, var(--primaryColor), var(--accentColor));
+  color: white;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 8px var(--primaryGlow);
+  transition: transform 0.2s ease;
+}
+
+.Contact_Count:hover {
+  transform: scale(1.05);
+}
+
+.Contacts_List {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  background: var(--bgColor);
+}
+
+/* Scrollbar Styling */
+.Contacts_List::-webkit-scrollbar {
+  width: 4px;
+}
+
+.Contacts_List::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.Contacts_List::-webkit-scrollbar-thumb {
+  background: var(--borderColor);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.Contacts_List::-webkit-scrollbar-thumb:hover {
+  background: var(--primaryColor);
+}
+
+/* Contact Item Styling (add this if you have individual contact items) */
+.Contact_Item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--bgColor);
+  border: 1px solid var(--borderColor);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.Contact_Item:hover {
+  background: var(--secondBgColor);
+  border-color: var(--primaryColor);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.Contact_Item:active {
+  transform: scale(0.98);
+}
+
+.Contact_Avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primaryColor), var(--accentColor));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.Contact_Info {
+  flex: 1;
+  min-width: 0;
+}
+
+.Contact_Name {
+  font-weight: 600;
+  color: var(--textColor);
+  font-size: 14px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.Contact_Email {
+  font-size: 12px;
+  color: var(--mutedText);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.Contact_Status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.Contact_Status.online {
+  background: var(--success);
+  box-shadow: 0 0 8px var(--success);
+}
+
+.Contact_Status.offline {
+  background: var(--mutedText);
+}
+
+/* Empty State */
+.Contacts_Empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--mutedText);
+  text-align: center;
+  gap: 12px;
+}
+
+.Contacts_Empty svg {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.Contacts_Empty h3 {
+  color: var(--textColor);
+  font-weight: 600;
+  margin: 0;
+}
+
+.Contacts_Empty p {
+  margin: 0;
+  font-size: 14px;
+  max-width: 200px;
+}
+
+/* Header actions (optional) */
+.Contacts_Actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.Contacts_Actions button {
+  background: none;
+  border: none;
+  color: var(--mutedText);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Contacts_Actions button:hover {
+  background: var(--borderColor);
+  color: var(--textColor);
+}
+
+/* Search Bar (optional) */
+.Contacts_Search {
+  padding: 0 20px 12px 20px;
+  flex-shrink: 0;
+}
+
+.Contacts_Search input {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--borderColor);
+  background: var(--bgColor);
+  color: var(--textColor);
+  font-size: 14px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.Contacts_Search input::placeholder {
+  color: var(--mutedText);
+}
+
+.Contacts_Search input:focus {
+  border-color: var(--primaryColor);
+  box-shadow: 0 0 0 3px var(--primaryGlow);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .Contacts_Container {
+    width: 100%;
+    min-width: unset;
+    height: calc(100vh - 60px);
+    border-right: none;
+  }
+  
+  .Contacts_Header {
+    padding: 16px 20px;
+  }
+  
+  .Contacts_Header h2 {
+    font-size: 18px;
+  }
+  
+  .Contacts_List {
+    padding: 12px 12px 16px 16px;
+  }
+}

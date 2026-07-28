@@ -3,15 +3,20 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import { Routes, Route } from 'react-router-dom'
 
 import LogPage from './Pages/LogPage'
 import NavBar from './Components/NavBar'
+import Home from './Pages/Home'
 
 function App() {
   return (
     <>
     <NavBar/>
-      <LogPage />
+      <Routes>
+        <Route path="/login" element={<LogPage />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
     </>
   )
 }

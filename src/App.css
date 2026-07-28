@@ -9,46 +9,47 @@
   --bgColor: rgb(248, 250, 254);
   --secondBgColor: rgb(30, 41, 59);
   --thirdBgColor: rgb(200, 227, 251);
-  
+
   --textColor: rgb(15, 23, 42);
   --secondTextC: rgb(25, 51, 77);
   --mutedText: rgb(100, 116, 139);
-  
+
   --primaryColor: rgb(59, 130, 246);
   --primaryHover: rgb(37, 99, 235);
   --accentColor: rgb(139, 92, 246);
   --primaryGlow: rgba(59, 130, 246, 0.4);
-  
+
   --success: rgb(34, 197, 94);
   --warning: rgb(234, 179, 8);
   --error: rgb(239, 68, 68);
-  
+
   --borderColor: rgb(226, 232, 240);
   --shadowColor: rgb(0, 38, 41);
 }
 
-/* Dark theme... idk how to use it though */
-/* :root {
+
+/* Dark theme */
+[data-theme="dark"] {
   --bgColor: rgb(15, 23, 42);
   --secondBgColor: rgb(30, 41, 59);
   --thirdBgColor: rgb(51, 65, 85);
-  
+
   --textColor: rgb(241, 245, 249);
   --secondTextC: rgb(203, 213, 225);
   --mutedText: rgb(148, 163, 184);
-  
+
   --primaryColor: rgb(96, 165, 250);
   --primaryHover: rgb(59, 130, 246);
   --accentColor: rgb(167, 139, 250);
   --primaryGlow: rgba(96, 165, 250, 0.3);
-  
+
   --success: rgb(52, 211, 153);
   --warning: rgb(251, 191, 36);
   --error: rgb(248, 113, 113);
-  
+
   --borderColor: rgb(51, 65, 85);
   --shadowColor: rgb(0, 0, 0);
-} */
+}
 
 
 body{

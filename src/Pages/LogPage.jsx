@@ -1,10 +1,13 @@
 import React from "react";
 import { useState } from "react";
 import "./LogPage.css";
+import { useNavigate } from "react-router-dom";
 
 function LogPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
 
   const user = {
     username: null,
@@ -20,7 +23,10 @@ function LogPage() {
 
     console.log("Username:", user.username);
     console.log("Password:", user.password);
-  };;
+
+    // After successful login, navigate to the home page
+    navigate("/home");
+  };
 
   return (
     <div className="login-container">
