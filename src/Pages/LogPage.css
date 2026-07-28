@@ -68,8 +68,8 @@
   border: 2px solid var(--borderColor);
   border-radius: 0.75rem;
   font-size: 0.95rem;
-  background: white;
-  color: var(--textColor);
+  /* background: white; */
+  /* color: var(--textColor); */
   transition: all 0.3s ease;
   outline: none;
 }

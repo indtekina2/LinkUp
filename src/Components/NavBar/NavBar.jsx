@@ -33,7 +33,27 @@ function NavBar() {
         <button type="submit">Search</button>
       </form>
 
-      <button onClick={toggleTheme}>{darkMode ? "☀️" : "🌙"}</button>
+      <button
+        onClick={toggleTheme}
+        style={{
+          background: "none",
+          border: "none",
+          fontSize: "2rem",
+          cursor: "pointer",
+          padding: "10px",
+          borderRadius: "50%",
+          transition: "background 0.3s",
+          width: "50px",
+          height: "50px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        onMouseEnter={(e) => (e.target.style.background = "rgba(0,0,0,0.1)")}
+        onMouseLeave={(e) => (e.target.style.background = "transparent")}
+      >
+        {darkMode ? "☀️" : "🌙"}
+      </button>
     </div>
   );
 }

@@ -9,10 +9,12 @@
   --bgColor: rgb(248, 250, 254);
   --secondBgColor: rgb(30, 41, 59);
   --thirdBgColor: rgb(200, 227, 251);
+  --forthBgColor: rgb(134, 255, 255);
 
   --textColor: rgb(15, 23, 42);
   --secondTextC: rgb(25, 51, 77);
   --mutedText: rgb(100, 116, 139);
+  --inputText: black;
 
   --primaryColor: rgb(59, 130, 246);
   --primaryHover: rgb(37, 99, 235);
@@ -33,6 +35,7 @@
   --bgColor: rgb(15, 23, 42);
   --secondBgColor: rgb(30, 41, 59);
   --thirdBgColor: rgb(51, 65, 85);
+  --forthBgColor: rgb(0, 2, 24);
 
   --textColor: rgb(241, 245, 249);
   --secondTextC: rgb(203, 213, 225);
@@ -112,7 +115,10 @@ body{
   transform: translateY(0);
 }
 
-
+input{
+  background-color: white;
+  color: var(--inputText);
+}
 
 @keyframes fadeIn {
   from {

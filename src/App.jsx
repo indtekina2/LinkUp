@@ -6,19 +6,19 @@ import './App.css'
 import { Routes, Route } from 'react-router-dom'
 
 import LogPage from './Pages/LogPage'
-import NavBar from './Components/NavBar'
+import NavBar from './Components/NavBar/NavBar.jsx'
 import Home from './Pages/Home'
 
 function App() {
   return (
     <>
-    <NavBar/>
+      <NavBar />
       <Routes>
         <Route path="/login" element={<LogPage />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/home/:id?" element={<Home />} />
       </Routes>
     </>
-  )
+  );
 }
 
 export default App

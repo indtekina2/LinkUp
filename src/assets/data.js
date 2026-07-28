@@ -11,6 +11,20 @@ const users = [
       "conversation_004",
     ],
   },
+
+  // other people
+  {
+    id: "user_002",
+    username: "Noor",
+  },
+  {
+    id: "user_003",
+    username: "Indtekina",
+  },
+  {
+    id: "user_006",
+    username: "Arnab",
+  },
 ];
 
 const conversations = [
@@ -84,7 +98,7 @@ const conversations = [
 
   // Private conversation
   {
-    id: "conversation_005",
+    id: "conversation_004",
 
     isGroup: false,
 
