@@ -6,6 +6,7 @@
   background-color: var(--bgColor);
 }
 
+
 /* No chat selected */
 .no-chat-selected {
   flex: 1;
@@ -26,6 +27,26 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--borderColor);
+
+  width: 100%;
+}
+
+.chat-name{
+  display: flex;
+}
+
+.back-button{
+  color: white;
+  background:transparent;
+  border:none;
+  width: 30px;
+  height: 30px;
+}
+
+.back-button:hover{
+  background: white;
+  color:black;
+  border-radius: 50%;
 }
 
 .chat-info h3 {
@@ -201,9 +222,18 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+
+  .hideOnPhone {
+    display: none;
+  }
+  .displayOnPhone {
+    display: flex;
+  }
+
   .MessageContainer {
-    height: 100vh;
+    height: calc(100vh - 85px);
     border-radius: 0;
+    width: 100%;
   }
   
   .message-bubble {

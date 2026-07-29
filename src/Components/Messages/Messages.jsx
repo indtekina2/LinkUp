@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import "./Messages.css";
 import { users, conversations } from "../../assets/data";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-function Messages({ display, id }) {
+
+function Messages({ id, visibilityClass }) {
   const [inputText, setInputText] = useState("");
+  const navigate = useNavigate();
 
   // Find the conversation
   let convo = conversations.find((conversation) => conversation.id === id);
@@ -69,7 +73,7 @@ function Messages({ display, id }) {
 
   if (!convo) {
     return (
-      <div className="MessageContainer">
+      <div className={`MessageContainer no-conversation ${visibilityClass}`}>
         <div className="no-chat-selected">
           <p>Select a conversation to start chatting</p>
         </div>
@@ -78,11 +82,16 @@ function Messages({ display, id }) {
   }
 
   return (
-    <div className="MessageContainer">
+    <div className={`MessageContainer ${visibilityClass}`}>
       {/* Header */}
       <div className="chat-header">
         <div className="chat-info">
-          <h3>{getChatName()}</h3>
+          <div className="chat-name">
+            <button onClick={() => navigate("/home")} className="back-button">
+              <ArrowLeft size={24} strokeWidth={2} />
+            </button>
+            <h3>{getChatName()}</h3>
+          </div>
           <span className="participant-count">
             {convo.participants.length} participants
           </span>

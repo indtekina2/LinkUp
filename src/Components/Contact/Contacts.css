@@ -11,6 +11,10 @@
   transition: all 0.3s ease;
 }
 
+.displayOnPhone {
+  display: block;
+}
+
 .Contacts_Header {
   display: flex;
   justify-content: space-between;
@@ -23,7 +27,7 @@
 }
 
 .Contacts_Header::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -1px;
   left: 24px;
@@ -46,7 +50,7 @@
 }
 
 .Contacts_Header h2::before {
-  content: '👥';
+  content: "👥";
   font-size: 20px;
   opacity: 0.7;
 }
@@ -258,22 +262,52 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .displayOnPhone {
+    display: block;
+  }
+
+  .hideOnPhone {
+    display: none;
+  }
+
   .Contacts_Container {
     width: 100%;
     min-width: unset;
     height: calc(100vh - 60px);
     border-right: none;
   }
-  
+
   .Contacts_Header {
     padding: 16px 20px;
   }
-  
+
   .Contacts_Header h2 {
     font-size: 18px;
   }
-  
+
   .Contacts_List {
     padding: 12px 12px 16px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hideOnPhone {
+    display: none;
+  }
+
+  .Contacts_Container {
+    height: calc(100vh - 50px);
+  }
+
+  .Contacts_Header {
+    padding: 12px 16px;
+  }
+
+  .Contacts_Header h2 {
+    font-size: 16px;
+  }
+
+  .Contacts_List {
+    padding: 8px 8px 12px 12px;
   }
 }

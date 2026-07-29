@@ -3,8 +3,16 @@ import "./NavBar.css";
 import { useEffect, useState } from "react";
 
 function NavBar() {
-  // Move state and function to the main component
   const [darkMode, setDarkMode] = useState(false);
+
+  // see if any theme is already set in localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      setDarkMode(savedTheme === "dark");
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    }
+  }, []);
 
   const toggleTheme = () => {
     setDarkMode(!darkMode);
@@ -12,10 +20,13 @@ function NavBar() {
       "data-theme",
       !darkMode ? "dark" : "light",
     );
+
+    // save the theme in localStorage
+    localStorage.setItem("theme", !darkMode ? "dark" : "light");
   };
 
   function search(event) {
-    event.preventDefault(); // Prevent form from reloading the page
+    event.preventDefault();
     console.log("Searching for.. Nothing");
   }
 
@@ -24,12 +35,8 @@ function NavBar() {
       <div className="Logo">
         <h1>LinkUp</h1>
       </div>
-      <form
-        onSubmit={search}
-        className="searchBar"
-        aria-placeholder="Search..."
-      >
-        <input type="text" />
+      <form onSubmit={search} className="searchBar">
+        <input type="text" placeholder="Search..." /> {/* Added placeholder */}
         <button type="submit">Search</button>
       </form>
 
