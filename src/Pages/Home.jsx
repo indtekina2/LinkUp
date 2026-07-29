@@ -9,14 +9,13 @@ function Home() {
   console.log(id);
 
   let displayContact, displayMessages;
-  if (window.innerWidth <= 768) {
-    if (id === undefined) {
-      displayContact = "displayOnPhone";
-      displayMessages = "hideOnPhone";
-    } else {
-      displayContact = "hideOnPhone";
-      displayMessages = "displayOnPhone";
-    }
+
+  if (id === undefined) {
+    displayContact = "displayOnPhone";
+    displayMessages = "hideOnPhone";
+  } else {
+    displayContact = "hideOnPhone";
+    displayMessages = "displayOnPhone";
   }
 
   return (

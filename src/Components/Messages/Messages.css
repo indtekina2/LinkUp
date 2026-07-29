@@ -6,6 +6,12 @@
   background-color: var(--bgColor);
 }
 
+.displayOnPhone {
+  display: flex;
+}
+.hideOnPhone {
+  display: flex;
+}
 
 /* No chat selected */
 .no-chat-selected {
@@ -47,6 +53,8 @@
   background: white;
   color:black;
   border-radius: 50%;
+
+  cursor: pointer;
 }
 
 .chat-info h3 {

@@ -4,7 +4,6 @@ import { users, conversations } from "../../assets/data";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
 function Messages({ id, visibilityClass }) {
   const [inputText, setInputText] = useState("");
   const navigate = useNavigate();
@@ -60,25 +59,32 @@ function Messages({ id, visibilityClass }) {
     if (inputText.trim() === "" || !convo) return;
 
     const newMessage = {
-      sender: "user_001", // Current user
+      sender: users.find((user) => user.currentUser).id,
       message: inputText,
       timestamp: new Date().toISOString(),
     };
 
-    // In a real app, you'd update the data source
-    // For now, we'll just log it
     console.log("New message:", newMessage);
     setInputText("");
+
+    conversations
+      .find((conversation) => conversation.id === id)
+      .messages.push(newMessage);
+    console.log(
+      "Updated conversation:",
+      conversations.find((conversation) => conversation.id === id).messages,
+    );
   };
 
   if (!convo) {
-    return (
-      <div className={`MessageContainer no-conversation ${visibilityClass}`}>
-        <div className="no-chat-selected">
-          <p>Select a conversation to start chatting</p>
+    
+      return (
+        <div className={`MessageContainer no-conversation ${visibilityClass}`}>
+          <div className="no-chat-selected">
+            <p>Select a conversation to start chatting</p>
+          </div>
         </div>
-      </div>
-    );
+      );
   }
 
   return (

@@ -14,8 +14,10 @@ function App() {
     <>
       <NavBar />
       <Routes>
-        <Route path="/login" element={<LogPage />} />
+        <Route path="/login" element={<LogPage work="login" />} />
         <Route path="/home/:id?" element={<Home />} />
+        <Route path="/new-group" element={<LogPage work="new-group" />} />
+        <Route path="/join-group" element={<LogPage work="join-group" />} />
       </Routes>
     </>
   );

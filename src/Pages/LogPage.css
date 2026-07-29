@@ -28,6 +28,32 @@
   margin-bottom: 2.25rem;
 }
 
+.header-container_group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.header-container_login {
+  display: block;
+}
+
+.return-button {
+  color: var(--textColor);
+  background: transparent;
+  border: none;
+  width: 30px;
+  height: 30px;
+}
+
+.return-button:hover {
+  background: var(--primaryColor);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
 .login-header h2 {
   color: var(--textColor);
   font-size: 1.75rem;

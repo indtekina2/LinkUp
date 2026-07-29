@@ -12,7 +12,10 @@
 }
 
 .displayOnPhone {
-  display: block;
+  display: flex;
+}
+.hideOnPhone {
+  display: flex;
 }
 
 .Contacts_Header {
@@ -260,6 +263,61 @@
   box-shadow: 0 0 0 3px var(--primaryGlow);
 }
 
+.Contacts_Footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  flex-shrink: 0;
+  background: var(--bgColor);
+  border-bottom: 1px solid var(--borderColor);
+  position: relative;
+}
+
+.Join_Group_Button{
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--primaryColor), var(--accentColor));
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.Join_Group_Button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.Join_Group_Button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.New_Group_Button{
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--primaryColor), var(--accentColor));
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.New_Group_Button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.New_Group_Button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .displayOnPhone {
@@ -296,7 +354,7 @@
   }
 
   .Contacts_Container {
-    height: calc(100vh - 50px);
+    height: calc(100vh - 75px);
   }
 
   .Contacts_Header {
