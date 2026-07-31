@@ -4,6 +4,7 @@ import "./LogPage.css";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { users } from "../assets/data";
+import { sendPost } from "../utils/API";
 
 function LogPage({ work }) {
   const [name, SetName] = useState("");
@@ -25,58 +26,66 @@ function LogPage({ work }) {
   };
 
   // Separate handler functions
-  const handleLogin = (e) => {
+  async function handleLogin(e) {
     e.preventDefault();
     if (!validateFields()) return;
 
     information.name = name;
     information.password = password;
     console.log("Logging in with:", information);
-    // Add your login API call here
-    navigate("/home");
+
+    try{
+      const data = await sendPost("http://localhost:3000/api/login", {
+      username: information.name,
+      password: information.password,
+    })
+
+    if (data.success) {
+      console.log(data.result);
+      users.push(data.result);
+      navigate("/home");
+    } else {
+      alert(data.message);
+    }
+    }catch(err){
+      console.log(`There is an error... Figure it out 🙂🥀`);
+    }
   };
 
   // signing in new user
-  const handleSignIn = (e) => {
+  async function handleSignIn(e){
     e.preventDefault();
     if (!validateFields()) return;
 
     information.name = name;
     information.password = password;
-    
-    fetch("http://localhost:3000/api/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+
+    try {
+      const data = await sendPost("http://localhost:3000/api/signup", {
         name: information.name,
         password: information.password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.success);
+      });
 
-        if (data.success === true) {
-          console.log(data.id);
+      console.log(data.success);
 
-          // saving it raw
-          users.push({
-            id: data.id,
-            username: information.name,
-            conversations: [],
-            currentUser: true,
-          });
+      if (data.success === true) {
+        console.log(data.id);
 
-          navigate("/home");
-        } else if (!data.success) {
-          alert(data.message);
-        } else {
-          console.log("Fahhhh");
-        }
-      })
-      .catch((error) => console.error("Error:", error));
+        // saving it raw
+        users.push({
+          id: data.id,
+          username: information.name,
+          conversations: [],
+          currentUser: true,
+        });
+
+        navigate("/home");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const handleCreateGroup = (e) => {
