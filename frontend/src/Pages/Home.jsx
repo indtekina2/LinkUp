@@ -3,10 +3,19 @@ import Contacts from "../Components/Contact/Contacts";
 import { useParams } from "react-router-dom";
 import Messages from "../Components/Messages/Messages";
 import "./Home.css";
+import {users} from "../assets/data"
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const { id } = useParams();
+  const navigate = useNavigate();
   console.log(id);
+
+  const currentUser = users.find((user) => user.currentUser);
+
+  if (!currentUser) {
+    navigate("/login");
+  }
 
   let displayContact, displayMessages;
 

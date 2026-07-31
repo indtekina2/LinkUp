@@ -1,113 +1,60 @@
 const users = [
-  // Current user
-  {
-    id: "user_001",
-    username: "indtekina",
-    password: "1234",
-    currentUser: true,
-    conversations: [
-      "conversation_001",
-      "conversation_002",
-      "conversation_003",
-      "conversation_004",
-      "conversation_005",
-      "conversation_006",
-      "conversation_007",
-      "conversation_008",
-      "conversation_009",
-      "conversation_010",
-    ],
-  },
-
   // Other users
   {
-    currentUser: false,
     id: "user_002",
     username: "Noor",
-    conversations: [
-      "conversation_001",
-      "conversation_002",
-      "conversation_005",
-      "conversation_008",
-    ],
   },
   {
-    currentUser: false,
     id: "user_003",
     username: "Indtekina",
-    conversations: ["conversation_002", "conversation_006", "conversation_009"],
   },
   {
-    currentUser: false,
     id: "user_004",
     username: "Rohit",
-    conversations: ["conversation_003", "conversation_007", "conversation_010"],
   },
   {
-    currentUser: false,
     id: "user_005",
     username: "Priya",
-    conversations: ["conversation_003", "conversation_005", "conversation_008"],
   },
   {
-    currentUser: false,
     id: "user_006",
     username: "Arnab",
-    conversations: ["conversation_004", "conversation_006", "conversation_009"],
   },
   {
-    currentUser: false,
     id: "user_007",
     username: "Sarah",
-    conversations: ["conversation_005", "conversation_007", "conversation_010"],
   },
   {
-    currentUser: false,
     id: "user_008",
     username: "Mike",
-    conversations: ["conversation_004", "conversation_006", "conversation_008"],
   },
   {
-    currentUser: false,
     id: "user_009",
     username: "Emma",
-    conversations: ["conversation_001", "conversation_007", "conversation_009"],
   },
   {
-    currentUser: false,
     id: "user_010",
     username: "David",
-    conversations: ["conversation_002", "conversation_003", "conversation_010"],
   },
   {
-    currentUser: false,
     id: "user_011",
     username: "Lisa",
-    conversations: ["conversation_005", "conversation_008", "conversation_009"],
   },
   {
-    currentUser: false,
     id: "user_012",
     username: "James",
-    conversations: ["conversation_001", "conversation_006", "conversation_007"],
   },
   {
-    currentUser: false,
     id: "user_013",
     username: "Maria",
-    conversations: ["conversation_004", "conversation_008", "conversation_010"],
   },
   {
-    currentUser: false,
     id: "user_014",
     username: "Tom",
-    conversations: ["conversation_002", "conversation_005", "conversation_009"],
   },
   {
-    currentUser: false,
     id: "user_015",
     username: "Anna",
-    conversations: ["conversation_003", "conversation_006", "conversation_010"],
   },
 ];
 

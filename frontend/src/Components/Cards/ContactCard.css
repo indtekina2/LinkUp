@@ -19,7 +19,7 @@
 
 .Contact_Card:hover {
   transform: translateX(8px) scale(1.02);
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 4px 12px var(--shadowColor);
   z-index: 1;
 }
 

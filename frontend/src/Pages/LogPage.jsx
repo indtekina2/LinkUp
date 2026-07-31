@@ -3,6 +3,7 @@ import { useState } from "react";
 import "./LogPage.css";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { users } from "../assets/data";
 
 function LogPage({ work }) {
   const [name, SetName] = useState("");
@@ -35,15 +36,15 @@ function LogPage({ work }) {
     navigate("/home");
   };
 
+  // signing in new user
   const handleSignIn = (e) => {
     e.preventDefault();
     if (!validateFields()) return;
 
     information.name = name;
     information.password = password;
-
-    // Sending JSON data
-    fetch("http://localhost:3000/api/signIN", {
+    
+    fetch("http://localhost:3000/api/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,11 +56,22 @@ function LogPage({ work }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.result.success);
-        if (data.result.success === true) {
+        console.log(data.success);
+
+        if (data.success === true) {
+          console.log(data.id);
+
+          // saving it raw
+          users.push({
+            id: data.id,
+            username: information.name,
+            conversations: [],
+            currentUser: true,
+          });
+
           navigate("/home");
-        } else if (!data.result.success) {
-          alert(data.result.message);
+        } else if (!data.success) {
+          alert(data.message);
         } else {
           console.log("Fahhhh");
         }
