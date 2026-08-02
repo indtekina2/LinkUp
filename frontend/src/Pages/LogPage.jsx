@@ -1,15 +1,17 @@
 import React from "react";
 import { useState } from "react";
 import "./LogPage.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { users } from "../assets/data";
-import { sendPost, getProtectedData } from "../utils/API";
+import { sendPost, sendProtectedPost } from "../utils/API";
 
-function LogPage({ work }) {
+function LogPage() {
   const [name, SetName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const work = useParams().work;
 
   const information = {
     name: null,
@@ -25,7 +27,6 @@ function LogPage({ work }) {
     return true;
   };
 
-  // Separate handler functions
   async function handleLogin(e) {
     e.preventDefault();
     if (!validateFields()) return;
@@ -43,9 +44,6 @@ function LogPage({ work }) {
     if (data.success) {
       console.log(data.token);
       localStorage.setItem("token", data.token);
-
-      let protectedData = await getProtectedData("http://localhost:3000/api/protected");
-      console.log("Protected data:", protectedData);
 
       navigate("/home");
     } else {
@@ -85,13 +83,27 @@ function LogPage({ work }) {
     }
   };
 
-  const handleCreateGroup = (e) => {
+  async function handleCreateGroup (e){
     e.preventDefault();
     if (!validateFields()) return;
 
     information.name = name;
     information.password = password;
     console.log("Creating new group with:", information);
+
+    // Send a POST request to the backend to create a new group
+    try{
+      const protectedData = await sendProtectedPost("http://localhost:3000/api/create-group", information);
+      console.log(protectedData);
+      if(protectedData.success){
+        alert("Group created successfully!");
+        navigate("/home");
+      } else {
+        alert(protectedData.message);
+      }
+    } catch (err) {
+      console.error("Boom... Best of luck with: ", err);
+    }
   };
 
   const handleJoinGroup = (e) => {

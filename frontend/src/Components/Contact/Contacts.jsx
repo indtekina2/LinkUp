@@ -9,10 +9,10 @@ function Contacts({ visibilityClass }) {
   const navigate = useNavigate();
 
   const newGroup = () => {
-    navigate("/new-group");
+    navigate("/login/new-group");
   }
   const joinGroup = () => {
-    navigate("/join-group");
+    navigate("/login/join-group");
   }
 
   // Sort conversations by most recent message timestamp

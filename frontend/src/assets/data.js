@@ -1,3 +1,8 @@
+import {getProtectedData} from "../utils/API";
+
+// get the user token from local storage
+const token = localStorage.getItem("token");
+
 const users = [
   // Other users
   {

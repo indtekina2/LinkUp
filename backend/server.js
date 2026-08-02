@@ -1,8 +1,9 @@
 const express = require("express");
 const register = require("./controllers/Register");
-const connectDB = require("./config/db")
-const login = require("./controllers/Login")
-const aunthenticateToken = require("./middleware/authMiddleware")
+const connectDB = require("./config/db");
+const login = require("./controllers/Login");
+const aunthenticateToken = require("./middleware/authMiddleware");
+const createGroup = require("./controllers/new-group");
 
 require("dotenv").config();
 
@@ -25,11 +26,17 @@ app.get("/", (req, res) => {
 
 app.post("/api/signup", register);
 
-app.post("/api/login", login)
+app.post("/api/login", login);
 
 app.get("/api/protected", aunthenticateToken, (req, res) => {
-  res.json({ message: "This is a protected route", userId: req.user.id });
+  res.json({
+    message: "This is from a protected route",
+    userId: req.user.id,
+    success: true,
+  });
 });
+
+app.post("/api/create-group", aunthenticateToken, createGroup);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
