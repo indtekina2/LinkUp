@@ -4,7 +4,7 @@ import "./LogPage.css";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { users } from "../assets/data";
-import { sendPost } from "../utils/API";
+import { sendPost, getProtectedData } from "../utils/API";
 
 function LogPage({ work }) {
   const [name, SetName] = useState("");
@@ -41,14 +41,18 @@ function LogPage({ work }) {
     })
 
     if (data.success) {
-      console.log(data.result);
-      users.push(data.result);
+      console.log(data.token);
+      localStorage.setItem("token", data.token);
+
+      let protectedData = await getProtectedData("http://localhost:3000/api/protected");
+      console.log("Protected data:", protectedData);
+
       navigate("/home");
     } else {
       alert(data.message);
     }
     }catch(err){
-      console.log(`There is an error... Figure it out 🙂🥀`);
+      console.log(`There is an error... Figure it out 🙂🥀:`);
     }
   };
 
@@ -68,16 +72,9 @@ function LogPage({ work }) {
 
       console.log(data.success);
 
-      if (data.success === true) {
+      if (data.success) {
         console.log(data.id);
-
-        // saving it raw
-        users.push({
-          id: data.id,
-          username: information.name,
-          conversations: [],
-          currentUser: true,
-        });
+        localStorage.setItem("token", data.token);
 
         navigate("/home");
       } else {

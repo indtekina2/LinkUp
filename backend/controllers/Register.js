@@ -1,23 +1,17 @@
 const User = require("../Models/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 // saving in new logged in users
 async function register(req, res) {
   // The received info
   const { name, password } = req.body;
-//   console.log("Received:", name, password);
-
-  // will be send back to the frontend
-  let returnStatement = {
-    success: false,
-    message: "Nothing happened",
-    result: null,
-  };
 
   if (!name || !password) {
-    returnStatement.success = false;
-    returnStatement.message = "Username and password are required.";
-    return res.status(400).json(returnStatement);
+    return res.status(400).json({
+      success: false,
+      message: "Username and password are required.",
+    });
   }
   try {
     // hashing the password
@@ -32,22 +26,32 @@ async function register(req, res) {
 
     await user.save();
 
-    returnStatement.message = "User saved successfully";
-    returnStatement.success = true;
-    returnStatement.result = {
-      id: user._id,
-    };
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
-    res.status(201).json(returnStatement);
+    return res.status(201).json({
+      success: true,
+      message: "User registered successfully",
+      token: token
+    });
   } catch (err) {
     returnStatement.success = false;
     if (err.code === 11000) {
-      returnStatement.message = "This user already exists";
-      res.status(409).json(returnStatement);
+      return res.status(409).json({
+        success: false,
+        message: "This user already exists",
+      });
     } else {
       console.error(err);
-      returnStatement.message = "Idk, something went wrong";
-      res.status(500).json(returnStatement);
+      return res.status(500).json({
+        success: false,
+        message: "Idk, something went wrong",
+      });
     }
   }
 }
