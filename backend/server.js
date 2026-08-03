@@ -6,6 +6,7 @@ const aunthenticateToken = require("./middleware/authMiddleware");
 const createGroup = require("./controllers/new-group");
 const {joinGroup, joinConversation} = require("./controllers/join-convo");
 const { sendMessage } = require("./controllers/sendMessage");
+const getCoversations = require("./controllers/getConversations")
 
 const {currentUser, getAllUser} = require("./controllers/userInfo");
 
@@ -52,6 +53,8 @@ app.post("/api/messages/send", aunthenticateToken, sendMessage);
 app.get("/api/current-user", aunthenticateToken, currentUser);
 
 app.post("/api/users", authenticateToken, getAllUser)
+
+app.post("/api/conversations", authenticateToken, getCoversations)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

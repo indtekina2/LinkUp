@@ -3,7 +3,7 @@ import { useState } from "react";
 import "./LogPage.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { users } from "../assets/data";
+import { users, getCurrentUserData } from "../assets/data";
 import { sendPost, sendProtectedPost } from "../utils/API";
 
 function LogPage() {
@@ -46,7 +46,9 @@ function LogPage() {
         localStorage.setItem("token", data.token);
 
         // add the current user to the users array
-        users.push({ name: information.name, currentUser: true, token: data.token });
+        getCurrentUserData().then(response=>{
+          console.log(response);
+        })
 
         navigate("/home");
       } else {
@@ -77,7 +79,9 @@ function LogPage() {
         console.log(data.id);
         localStorage.setItem("token", data.token);
 
-        users.push({ name: information.name, currentUser: true, token: data.token });
+        getCurrentUserData().then((response) => {
+          console.log(response);
+        });
 
         navigate("/home");
       } else {

@@ -28,7 +28,7 @@ async function sendMessage(req, res) {
   } catch (error) {
     return res
       .status(500)
-      .json({ success: false, message: "coming from sendMessage controller" });
+      .json({ success: false, message: error });
   }
 }
 

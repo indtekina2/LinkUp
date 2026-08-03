@@ -43,35 +43,35 @@ async function getAllUsers(ids) {
 }
 
 // getting all conversations data from backend
-// async function getAllConversations(convoIds) {
-//   try {
-//     const data = await sendProtectedPost(
-//       "http://localhost:3000/api/conversations",
-//       { convoIds },
-//     );
-//     if (data.success) {
-//       console.log("All conversations data:", data.conversations);
-//       conversations.push(
-//         ...data.conversations.map((conversation) => ({
-//           id: conversation.id,
-//           isGroup: conversation.isGroup,
-//           name: conversation.name,
-//           participants: conversation.participants,
-//           messages: conversation.messages,
-//         })),
-//       );
-//       return data.conversations;
-//     } else {
-//       console.error("Failed to fetch all conversations data:", data.message);
-//       return null;
-//     }
-//   } catch (error) {
-//     console.error("Error fetching all conversations data:", error);
-//     return null;
-//   }
-// }
+async function getAllConversations(convoIds) {
+  try {
+    const data = await sendProtectedPost(
+      "http://localhost:3000/api/conversations",
+      { convoIds },
+    );
+    if (data.success) {
+      console.log("All conversations data:", data.conversations);
+      conversations.push(
+        ...data.conversations.map((conversation) => ({
+          id: conversation.id,
+          isGroup: conversation.isGroup,
+          name: conversation.name,
+          participants: conversation.participants,
+          messages: conversation.messages,
+        })),
+      );
+      return data.conversations;
+    } else {
+      console.error("Failed to fetch all conversations data:", data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching all conversations data:", error);
+    return null;
+  }
+}
 
-const users = [
+let users = [
   // current user
   {
     currentUser: true,
@@ -782,4 +782,4 @@ const conversations = [
   },
 ];
 
-export { users, conversations };
+export { users, conversations, getCurrentUserData };
