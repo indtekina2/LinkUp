@@ -8,12 +8,14 @@ const conversationSchema = mongoose.Schema({
     name: {
         type: String,
         unique: true,
+        required: true
     },
     password: {
         type: String,
     },
     participants:{
         type: Array,
+        required: true
     }
 })
 

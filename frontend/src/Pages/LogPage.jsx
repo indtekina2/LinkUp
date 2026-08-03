@@ -35,27 +35,30 @@ function LogPage() {
     information.password = password;
     console.log("Logging in with:", information);
 
-    try{
+    try {
       const data = await sendPost("http://localhost:3000/api/login", {
-      username: information.name,
-      password: information.password,
-    })
+        username: information.name,
+        password: information.password,
+      });
 
-    if (data.success) {
-      console.log(data.token);
-      localStorage.setItem("token", data.token);
+      if (data.success) {
+        console.log(data.token);
+        localStorage.setItem("token", data.token);
 
-      navigate("/home");
-    } else {
-      alert(data.message);
-    }
-    }catch(err){
+        // add the current user to the users array
+        users.push({ name: information.name, currentUser: true, token: data.token });
+
+        navigate("/home");
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
       console.log(`There is an error... Figure it out 🙂🥀:`);
     }
-  };
+  }
 
   // signing in new user
-  async function handleSignIn(e){
+  async function handleSignIn(e) {
     e.preventDefault();
     if (!validateFields()) return;
 
@@ -74,6 +77,8 @@ function LogPage() {
         console.log(data.id);
         localStorage.setItem("token", data.token);
 
+        users.push({ name: information.name, currentUser: true, token: data.token });
+
         navigate("/home");
       } else {
         alert(data.message);
@@ -81,9 +86,9 @@ function LogPage() {
     } catch (error) {
       console.error("Error:", error);
     }
-  };
+  }
 
-  async function handleCreateGroup (e){
+  async function handleCreateGroup(e) {
     e.preventDefault();
     if (!validateFields()) return;
 
@@ -92,11 +97,15 @@ function LogPage() {
     console.log("Creating new group with:", information);
 
     // Send a POST request to the backend to create a new group
-    try{
-      const protectedData = await sendProtectedPost("http://localhost:3000/api/create-group", information);
+    try {
+      const protectedData = await sendProtectedPost(
+        "http://localhost:3000/api/create-group",
+        information,
+      );
       console.log(protectedData);
-      if(protectedData.success){
+      if (protectedData.success) {
         alert("Group created successfully!");
+
         navigate("/home");
       } else {
         alert(protectedData.message);
@@ -104,15 +113,34 @@ function LogPage() {
     } catch (err) {
       console.error("Boom... Best of luck with: ", err);
     }
-  };
+  }
 
-  const handleJoinGroup = (e) => {
+  async function handleJoinGroup(e) {
     e.preventDefault();
     if (!validateFields()) return;
 
     information.name = name;
     information.password = password;
-  };
+
+    console.log("Joining group with:", information);
+
+    // Send a POST request to the backend to join an existing group
+    try {
+      const protectedData = await sendProtectedPost(
+        "http://localhost:3000/api/join-group",
+        information,
+      );
+      console.log(protectedData);
+      if (protectedData.success) {
+        console.log(protectedData.message);
+        navigate("/home");
+      } else if (!protectedData.success) {
+        alert(protectedData.message);
+      }
+    } catch (err) {
+      console.error("Error while joining group:", err);
+    }
+  }
 
   // Setting header and subheader text
   let header_container;

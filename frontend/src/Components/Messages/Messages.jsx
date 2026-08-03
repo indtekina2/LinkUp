@@ -54,37 +54,42 @@ function Messages({ id, visibilityClass }) {
   };
 
   // Send message
-  const sendMessage = (e) => {
+  async function sendMessage(e) {
     e.preventDefault();
     if (inputText.trim() === "" || !convo) return;
 
     const newMessage = {
-      sender: users.find((user) => user.currentUser).id,
+      convoID: id,
       message: inputText,
       timestamp: new Date().toISOString(),
     };
 
-    console.log("New message:", newMessage);
-    setInputText("");
-
-    conversations
-      .find((conversation) => conversation.id === id)
-      .messages.push(newMessage);
-    console.log(
-      "Updated conversation:",
-      conversations.find((conversation) => conversation.id === id).messages,
-    );
-  };
+    // send the message to the backend
+    try {
+      const messageResponse = await sendProtectedPost(
+        `/api/messages/send`,
+        newMessage,
+      );
+      if (messageResponse.success) {
+        // Update the local state to reflect the new message
+        convo.messages.push(newMessage);
+        setInputText(""); // Clear the input field
+      } else {
+        console.error("Failed to send message:", messageResponse.message);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  }
 
   if (!convo) {
-    
-      return (
-        <div className={`MessageContainer no-conversation ${visibilityClass}`}>
-          <div className="no-chat-selected">
-            <p>Select a conversation to start chatting</p>
-          </div>
+    return (
+      <div className={`MessageContainer no-conversation ${visibilityClass}`}>
+        <div className="no-chat-selected">
+          <p>Select a conversation to start chatting</p>
         </div>
-      );
+      </div>
+    );
   }
 
   return (

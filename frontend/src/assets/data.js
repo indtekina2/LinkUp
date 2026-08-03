@@ -1,9 +1,100 @@
-import {getProtectedData} from "../utils/API";
+import { getProtectedData, sendProtectedPost } from "../utils/API";
 
-// get the user token from local storage
-const token = localStorage.getItem("token");
+// getting current user data from backend
+async function getCurrentUserData() {
+  try {
+    const data = await getProtectedData(
+      "http://localhost:3000/api/current-user",
+    );
+    if (data.success) {
+      console.log("Current user data:", data.user);
+      users.push(data.user || []);
+      return data.user;
+    } else {
+      console.error("Failed to fetch current user data:", data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching current user data:", error);
+    return null;
+  }
+}
+
+// getting all users data from backend
+async function getAllUsers(ids) {
+  try {
+    const data = await sendProtectedPost("http://localhost:3000/api/users", {
+      ids,
+    });
+    if (data.success) {
+      console.log("All users data:", data.users);
+      users.push(
+        ...data.users.map((user) => ({ name: user.name, id: user.id })),
+      );
+      return data.users;
+    } else {
+      console.error("Failed to fetch all users data:", data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching all users data:", error);
+    return null;
+  }
+}
+
+// getting all conversations data from backend
+// async function getAllConversations(convoIds) {
+//   try {
+//     const data = await sendProtectedPost(
+//       "http://localhost:3000/api/conversations",
+//       { convoIds },
+//     );
+//     if (data.success) {
+//       console.log("All conversations data:", data.conversations);
+//       conversations.push(
+//         ...data.conversations.map((conversation) => ({
+//           id: conversation.id,
+//           isGroup: conversation.isGroup,
+//           name: conversation.name,
+//           participants: conversation.participants,
+//           messages: conversation.messages,
+//         })),
+//       );
+//       return data.conversations;
+//     } else {
+//       console.error("Failed to fetch all conversations data:", data.message);
+//       return null;
+//     }
+//   } catch (error) {
+//     console.error("Error fetching all conversations data:", error);
+//     return null;
+//   }
+// }
 
 const users = [
+  // current user
+  {
+    currentUser: true,
+    username: "Indtekina",
+    conversations: [
+      "conversation_001",
+      "conversation_002",
+      "conversation_003",
+      "conversation_004",
+      "conversation_005",
+      "conversation_006",
+      "conversation_007",
+      "conversation_008",
+      "conversation_009",
+      "conversation_010",
+      "conversation_011",
+      "conversation_012",
+      "conversation_013",
+      "conversation_014",
+      "conversation_015",
+    ],
+  },
+
   // Other users
   {
     id: "user_002",

@@ -4,6 +4,10 @@ const connectDB = require("./config/db");
 const login = require("./controllers/Login");
 const aunthenticateToken = require("./middleware/authMiddleware");
 const createGroup = require("./controllers/new-group");
+const {joinGroup, joinConversation} = require("./controllers/join-convo");
+const { sendMessage } = require("./controllers/sendMessage");
+
+const {currentUser, getAllUser} = require("./controllers/userInfo");
 
 require("dotenv").config();
 
@@ -18,6 +22,7 @@ connectDB();
 
 // black box for me...
 const cors = require("cors");
+const authenticateToken = require("./middleware/authMiddleware");
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -37,6 +42,16 @@ app.get("/api/protected", aunthenticateToken, (req, res) => {
 });
 
 app.post("/api/create-group", aunthenticateToken, createGroup);
+
+app.post("/api/join-group", aunthenticateToken, joinGroup);
+
+app.post("/api/join-conversation", aunthenticateToken, joinConversation);
+
+app.post("/api/messages/send", aunthenticateToken, sendMessage);
+
+app.get("/api/current-user", aunthenticateToken, currentUser);
+
+app.post("/api/users", authenticateToken, getAllUser)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
