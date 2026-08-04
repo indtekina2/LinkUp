@@ -1,9 +1,11 @@
 import React from "react";
 import "./NavBar.css";
 import { useEffect, useState } from "react";
+import { sendProtectedPost } from "../../utils/API";
 
 function NavBar() {
   const [darkMode, setDarkMode] = useState(false);
+  const [name, SetName] = useState("")
 
   // see if any theme is already set in localStorage
   useEffect(() => {
@@ -25,9 +27,11 @@ function NavBar() {
     localStorage.setItem("theme", !darkMode ? "dark" : "light");
   };
 
-  function search(event) {
-    event.preventDefault();
-    console.log("Searching for.. Nothing");
+  async function search(e) {
+    e.preventDefault();
+    console.log("Searching for..", name);
+    const response = await sendProtectedPost("http://localhost:3000/api/join-conversation", {name})
+    console.log(response)
   }
 
   return (
@@ -36,7 +40,7 @@ function NavBar() {
         <h1>LinkUp</h1>
       </div>
       <form onSubmit={search} className="searchBar">
-        <input type="text" placeholder="Search..." /> {/* Added placeholder */}
+        <input type="text" placeholder="Search..." value={name} onChange={(e) => SetName(e.target.value)}/> {/* Added placeholder */}
         <button type="submit">Search</button>
       </form>
 

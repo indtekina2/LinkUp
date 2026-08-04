@@ -58,7 +58,7 @@ async function joinConversation(req, res) {
         const userId = req.user.id;
 
         // finding second participant's id based on the name provided
-        const secondParticipant = await User.findOne({ name });
+        const secondParticipant = await User.findOne({ username: name });
         if (!secondParticipant) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
