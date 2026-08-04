@@ -1,19 +1,17 @@
 import React from "react";
 import "./Contacts.css";
 import ContactCard from "../Cards/ContactCard.jsx";
-import { conversations } from "../../assets/data.js";
 import { useNavigate } from "react-router-dom";
 
-function Contacts({ visibilityClass }) {
-
+function Contacts({ visibilityClass, users, conversations }) {
   const navigate = useNavigate();
 
   const newGroup = () => {
     navigate("/login/new-group");
-  }
+  };
   const joinGroup = () => {
     navigate("/login/join-group");
-  }
+  };
 
   // Sort conversations by most recent message timestamp
   const getLastMessageTimestamp = (conversation) => {
@@ -48,6 +46,7 @@ function Contacts({ visibilityClass }) {
       <div className="Contacts_List">
         {sortedConversations.map((conversation, index) => (
           <ContactCard
+            users={users}
             key={conversation.id}
             conversation={conversation}
             style={{ animationDelay: `${index * 0.08}s` }}

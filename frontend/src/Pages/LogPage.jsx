@@ -3,7 +3,6 @@ import { useState } from "react";
 import "./LogPage.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { users, getCurrentUserData } from "../assets/data";
 import { sendPost, sendProtectedPost } from "../utils/API";
 
 function LogPage() {

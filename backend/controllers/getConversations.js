@@ -2,10 +2,10 @@ const Message = require("../Models/Message");
 const Conversations = require("../Models/Conversation");
 
 async function getConversations(req, res) {
-  const { convoID } = req.body;
+  const { convoId } = req.body;
 
-  // check if the convoID exists
-  if (!convoID) {
+  // check if the convoId exists
+  if (!convoId) {
     return res.status(400).json({
       success: false,
       message: "No id was sent",
@@ -13,7 +13,7 @@ async function getConversations(req, res) {
   }
 
   try {
-    const conversation = await Conversations.findById(convoID);
+    const conversation = await Conversations.findById(convoId);
 
     // Check if conversation exists
     if (!conversation) {
@@ -24,7 +24,8 @@ async function getConversations(req, res) {
     }
 
     if (conversation.participants.includes(req.user.id)) {
-      const messages = await Message.find({ convoID: convoID });
+      const messages = await Message.find({ convoID: convoId });
+      console.log(messages);
 
       return res.status(200).json({
         success: true,
@@ -32,7 +33,8 @@ async function getConversations(req, res) {
             id: conversation._id,
             isGroup: conversation.isGroup,
             name: conversation.name,
-            messages: messages
+            messages: messages,
+            participants: conversation.participants
         }
       });
     }

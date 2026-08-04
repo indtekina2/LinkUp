@@ -1,84 +1,112 @@
 import React, { useState } from "react";
 import "./Messages.css";
-import { users, conversations } from "../../assets/data";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { sendProtectedPost, getCurrentUserId } from "../../utils/API";
 
-function Messages({ id, visibilityClass }) {
+function Messages({
+  id,
+  users,
+  conversations,
+  setConversations,
+  visibilityClass,
+}) {
   const [inputText, setInputText] = useState("");
   const navigate = useNavigate();
 
-  // Find the conversation
-  let convo = conversations.find((conversation) => conversation.id === id);
+  // Find the selected conversation
+  console.log("Route id:", id);
+  console.log("Conversations:", conversations);
+  const convo = conversations.find((conversation) => conversation.id === id);
 
-  // Get the other participant(s) name
+  // Get the chat name
   const getChatName = () => {
     if (!convo) return "Chat";
 
     if (convo.isGroup) {
       return convo.name || "Group Chat";
-    } else {
-      // Find the other participant (not the current user)
-      const otherParticipant = convo.participants.find((p) => p !== "user_001");
-      const user = users.find((u) => u.id === otherParticipant);
-      return user ? user.username : "Unknown User";
     }
+
+    const otherParticipant = convo.participants.find(
+      (p) => p !== getCurrentUserId(),
+    );
+
+    const user = users.find((u) => u.id === otherParticipant);
+
+    return user ? user.username : "Unknown User";
   };
 
-  // Get sender name from user ID
+  // Get sender name
   const getSenderName = (senderId) => {
     const user = users.find((u) => u.id === senderId);
     return user ? user.username : senderId;
   };
 
-  // Format timestamp
+  // Format time
   const formatTime = (timestamp) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return new Date(timestamp).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   // Format date
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
 
-    if (date.toDateString() === today.toDateString()) {
-      return "Today";
-    } else if (date.toDateString() === yesterday.toDateString()) {
-      return "Yesterday";
-    } else {
-      return date.toLocaleDateString([], { month: "short", day: "numeric" });
-    }
+    const today = new Date();
+    const yesterday = new Date();
+
+    yesterday.setDate(today.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString()) return "Today";
+
+    if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
+
+    return date.toLocaleDateString([], {
+      month: "short",
+      day: "numeric",
+    });
   };
 
   // Send message
   async function sendMessage(e) {
     e.preventDefault();
-    if (inputText.trim() === "" || !convo) return;
+
+    if (!inputText.trim() || !convo) return;
 
     const newMessage = {
+      sender: getCurrentUserId(),
       convoID: id,
       message: inputText,
       timestamp: new Date().toISOString(),
     };
 
-    // send the message to the backend
     try {
-      const messageResponse = await sendProtectedPost(
-        `/api/messages/send`,
+      const response = await sendProtectedPost(
+        "http://localhost:3000/api/messages/send",
         newMessage,
       );
-      if (messageResponse.success) {
-        // Update the local state to reflect the new message
-        convo.messages.push(newMessage);
-        setInputText(""); // Clear the input field
-      } else {
-        console.error("Failed to send message:", messageResponse.message);
+
+      if (!response.success) {
+        console.error(response.message);
+        return;
       }
+
+      setConversations((prev) =>
+        prev.map((conversation) =>
+          conversation.id === id
+            ? {
+                ...conversation,
+                messages: [...conversation.messages, newMessage],
+              }
+            : conversation,
+        ),
+      );
+
+      setInputText("");
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error(error);
     }
   }
 
@@ -94,19 +122,21 @@ function Messages({ id, visibilityClass }) {
 
   return (
     <div className={`MessageContainer ${visibilityClass}`}>
-      {/* Header */}
       <div className="chat-header">
         <div className="chat-info">
           <div className="chat-name">
             <button onClick={() => navigate("/home")} className="back-button">
               <ArrowLeft size={24} strokeWidth={2} />
             </button>
+
             <h3>{getChatName()}</h3>
           </div>
+
           <span className="participant-count">
             {convo.participants.length} participants
           </span>
         </div>
+
         <div className="chat-actions">
           <span className="chat-type">
             {convo.isGroup ? "👥 Group" : "💬 Private"}
@@ -114,10 +144,10 @@ function Messages({ id, visibilityClass }) {
         </div>
       </div>
 
-      {/* Messages */}
       <div className="messages-container">
         {convo.messages.map((msg, index) => {
-          const isCurrentUser = msg.sender === "user_001";
+          const isCurrentUser = msg.sender === getCurrentUserId();
+
           const showDate =
             index === 0 ||
             new Date(msg.timestamp).toDateString() !==
@@ -130,21 +160,21 @@ function Messages({ id, visibilityClass }) {
                   <span>{formatDate(msg.timestamp)}</span>
                 </div>
               )}
+
               <div
-                className={`message ${isCurrentUser ? "message-right" : "message-left"}`}
+                className={`message ${
+                  isCurrentUser ? "message-right" : "message-left"
+                }`}
               >
                 <div className="message-bubble">
-                  {!convo.isGroup && !isCurrentUser && (
+                  {!isCurrentUser && (
                     <div className="sender-name">
                       {getSenderName(msg.sender)}
                     </div>
                   )}
-                  {convo.isGroup && !isCurrentUser && (
-                    <div className="sender-name">
-                      {getSenderName(msg.sender)}
-                    </div>
-                  )}
+
                   <div className="message-text">{msg.message}</div>
+
                   <div className="message-time">
                     {formatTime(msg.timestamp)}
                   </div>
@@ -155,15 +185,15 @@ function Messages({ id, visibilityClass }) {
         })}
       </div>
 
-      {/* Input Area */}
       <form className="input-area" onSubmit={sendMessage}>
         <input
           type="text"
+          className="message-input"
           placeholder="Type a message..."
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          className="message-input"
         />
+
         <button type="submit" className="send-button">
           Send
         </button>

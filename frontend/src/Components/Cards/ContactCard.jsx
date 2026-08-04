@@ -1,9 +1,9 @@
 import React from "react";
 import "./ContactCard.css"
 import { useNavigate } from "react-router-dom";
-import { users } from "../../assets/data";
+import { getCurrentUserId } from "../../utils/API";
 
-function ContactCard({ conversation, currentUserId = "user_001", style}) {
+function ContactCard({ users, conversation, currentUserId = getCurrentUserId(), style}) {
   const navigate = useNavigate();
 
   function openUser() {

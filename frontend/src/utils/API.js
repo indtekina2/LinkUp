@@ -82,6 +82,16 @@ async function isAuthenticated(token) {
   }
   return false;
 }
+function getCurrentUserId() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.id;
+  } catch {
+    return null;
+  }
+}
 
 export {
   sendPost,
@@ -89,4 +99,5 @@ export {
   getProtectedData,
   isAuthenticated,
   sendProtectedPost,
+  getCurrentUserId,
 };
