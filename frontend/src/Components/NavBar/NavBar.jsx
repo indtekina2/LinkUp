@@ -2,10 +2,12 @@ import React from "react";
 import "./NavBar.css";
 import { useEffect, useState } from "react";
 import { sendProtectedPost } from "../../utils/API";
+import { useNavigate } from "react-router-dom";
 
 function NavBar() {
   const [darkMode, setDarkMode] = useState(false);
   const [name, SetName] = useState("")
+  const navigate = useNavigate()
 
   // see if any theme is already set in localStorage
   useEffect(() => {
@@ -29,9 +31,10 @@ function NavBar() {
 
   async function search(e) {
     e.preventDefault();
-    console.log("Searching for..", name);
+    // console.log("Searching for..", name);
     const response = await sendProtectedPost("http://localhost:3000/api/join-conversation", {name})
     console.log(response)
+    navigate(`/home/${response.conversation._id}`)
   }
 
   return (
