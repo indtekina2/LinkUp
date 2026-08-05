@@ -25,7 +25,7 @@ async function getConversations(req, res) {
 
     if (conversation.participants.includes(req.user.id)) {
       const messages = await Message.find({ convoID: convoId });
-      console.log(messages);
+      // console.log(messages);
 
       return res.status(200).json({
         success: true,

@@ -3,25 +3,41 @@ import "./App.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { isAuthenticated } from "./utils/API";
 
-
 import LogPage from "./Pages/LogPage";
 import NavBar from "./Components/NavBar/NavBar.jsx";
 import Home from "./Pages/Home";
+import { socket } from "./socket.js";
 
 function App() {
-
   const navigate = useNavigate();
 
   // check if the user can access which page
   useEffect(() => {
-    const token = localStorage.getItem("token"); 
-    isAuthenticated(token).then((auth) => {
+    async function checkAuth() {
+      const token = localStorage.getItem("token");
+      console.log(token);
+      
+      const auth = await isAuthenticated(token);
+      console.log(auth);
+
       if (!auth) {
         navigate("/login/login");
-      }else if(auth && window.location.pathname === "/login/login") {
+        return;
+      }
+
+      socket.auth = { token };
+      socket.connect();
+
+      if (window.location.pathname === "/login/login") {
         navigate("/home");
       }
-    });
+    }
+
+    checkAuth();
+
+    return () => {
+      socket.disconnect();
+    };
   }, [navigate]);
 
   return (

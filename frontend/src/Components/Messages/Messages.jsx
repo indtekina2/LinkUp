@@ -3,6 +3,8 @@ import "./Messages.css";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { sendProtectedPost, getCurrentUserId } from "../../utils/API";
+import { socket } from "../../socket";
+import { useEffect } from "react";
 
 function Messages({
   id,
@@ -18,6 +20,26 @@ function Messages({
   // console.log("Route id:", id);
   // console.log("Conversations:", conversations);
   const convo = conversations.find((conversation) => conversation.id === id);
+
+  useEffect(() => {
+    socket.emit("join-conversation", id);
+    socket.on("new-message", (savedMessage) => {
+      setConversations((prev) =>
+        prev.map((conversation) =>
+          conversation.id === savedMessage.convoID
+            ? {
+                ...conversation,
+                messages: [...conversation.messages, savedMessage],
+              }
+            : conversation,
+        ),
+      );
+    });
+
+    return () => {
+      socket.off("new-message");
+    };
+  }, []);
 
   // Get the chat name
   const getChatName = () => {
@@ -83,26 +105,10 @@ function Messages({
     };
 
     try {
-      const response = await sendProtectedPost(
-        "http://localhost:3000/api/messages/send",
-        newMessage,
-      );
-
-      if (!response.success) {
-        console.error(response.message);
-        return;
-      }
-
-      setConversations((prev) =>
-        prev.map((conversation) =>
-          conversation.id === id
-            ? {
-                ...conversation,
-                messages: [...conversation.messages, newMessage],
-              }
-            : conversation,
-        ),
-      );
+      socket.emit("send-message", {
+        convoID: newMessage.convoID,
+        message: newMessage.message,
+      });
 
       setInputText("");
     } catch (error) {

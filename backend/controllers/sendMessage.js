@@ -3,38 +3,51 @@ const User = require("../Models/User");
 const Message = require("../Models/Message");
 
 // getting message from the client and saving it to the database
-async function sendMessage(req, res) {
-  const { convoID, message, timestamp } = req.body;
+async function saveMessage( { convoID, message, sender } ) {
+  
   try {
     // Check if the conversation exists
     const conversation = await Conversation.findById(convoID);
     if (!conversation) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Conversation not found" });
+      return { success: false, message: "Conversation not found" };
     }
     // if the user exists in the convo
-    else if (conversation.participants.includes(req.user.id)) {
+    else if (conversation.participants.includes(sender)) {
       // Create a new message
       const newMessage = new Message({
         convoID,
-        sender: req.user.id,
+        sender: sender,
         message: message,
-        timestamp: timestamp || new Date(),
+        timestamp: new Date().toDateString(),
       });
       await newMessage.save();
-      return res
-        .status(201)
-        .json({ success: true, message: "Message sent successfully" });
+      return newMessage;
     } else {
-      return res.status(403).json({
+      return {
         success: false,
         message: "The user is not registered in the group"
-      })
+      }
     }
   } catch (error) {
-    return res.status(500).json({ success: false, message: error });
+    return { success: false, message: error };
   }
 }
 
-module.exports = { sendMessage };
+async function sendMessage(req, res) {
+    try {
+        const saved = await saveMessage({
+            convoID: req.body.convoID,
+            sender: req.user.id,
+            message: req.body.message,
+        });
+
+        res.status(201).json(saved);
+    } catch (err) {
+        return res.status(500).json({
+          success:false,
+          message: "Internal server error"
+        })
+    }
+}
+
+module.exports = { sendMessage, saveMessage };
