@@ -32,7 +32,7 @@ function NavBar() {
   async function search(e) {
     e.preventDefault();
     // console.log("Searching for..", name);
-    const response = await sendProtectedPost("http://localhost:3000/api/join-conversation", {name})
+    const response = await sendProtectedPost("api/join-conversation", {name})
     console.log(response)
     navigate(`/home/${response.conversation._id}`)
   }

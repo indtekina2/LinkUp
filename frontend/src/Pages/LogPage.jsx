@@ -36,7 +36,7 @@ function LogPage() {
     console.log("Logging in with:", information);
 
     try {
-      const data = await sendPost("http://localhost:3000/api/login", {
+      const data = await sendPost("api/login", {
         username: information.name,
         password: information.password,
       });
@@ -68,7 +68,7 @@ function LogPage() {
     information.password = password;
 
     try {
-      const data = await sendPost("http://localhost:3000/api/signup", {
+      const data = await sendPost("api/signup", {
         name: information.name,
         password: information.password,
       });
@@ -103,7 +103,7 @@ function LogPage() {
     // Send a POST request to the backend to create a new group
     try {
       const protectedData = await sendProtectedPost(
-        "http://localhost:3000/api/create-group",
+        "api/create-group",
         information,
       );
       console.log(protectedData);
@@ -131,7 +131,7 @@ function LogPage() {
     // Send a POST request to the backend to join an existing group
     try {
       const protectedData = await sendProtectedPost(
-        "http://localhost:3000/api/join-group",
+        "api/join-group",
         information,
       );
       console.log(protectedData);

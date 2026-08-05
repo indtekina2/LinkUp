@@ -4,7 +4,7 @@ import { getProtectedData, sendProtectedPost } from "../utils/API";
 async function getCurrentUserData() {
   try {
     const data = await getProtectedData(
-      "http://localhost:3000/api/current-user",
+      "api/current-user",
     );
     if (data.success) {
       console.log("Current user data:", data.user);
@@ -22,7 +22,7 @@ async function getCurrentUserData() {
 // getting all users data from backend
 async function getAllUsers(ids) {
   try {
-    const data = await sendProtectedPost("http://localhost:3000/api/users", {
+    const data = await sendProtectedPost("api/users", {
       ids,
     });
     if (data.success) {
@@ -42,7 +42,7 @@ async function getAllUsers(ids) {
 async function getConversation(convoId) {
   try {
     const data = await sendProtectedPost(
-      "http://localhost:3000/api/conversations",
+      "api/conversations",
       { convoId },
     );
     if (data.success) {

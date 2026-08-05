@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const register = require("./controllers/Register");
 const connectDB = require("./config/db");
@@ -14,7 +15,6 @@ const getCoversations = require("./controllers/getConversations");
 
 const { currentUser, getAllUser } = require("./controllers/userInfo");
 
-require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT;
@@ -22,7 +22,7 @@ const port = process.env.PORT;
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST"],
     credentials: true,
   },

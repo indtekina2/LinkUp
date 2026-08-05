@@ -1,6 +1,9 @@
+const url = import.meta.env.VITE_API_URL
+
 // sending and getting data from backend using fetch API
 async function sendPost(api, information) {
-  const response = await fetch(api, {
+  const finalAPI = `${url}/${api}`
+  const response = await fetch(finalAPI, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -27,8 +30,9 @@ async function getData(api) {
 // request protected data from backend using fetch API
 async function getProtectedData(api) {
   const token = localStorage.getItem("token");
+  const finalAPI = `${url}/${api}`
 
-  const response = await fetch(api, {
+  const response = await fetch(finalAPI, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -46,13 +50,14 @@ async function getProtectedData(api) {
 // sending protected data to backend using fetch API
 async function sendProtectedPost(api, information) {
   const token = localStorage.getItem("token");
+  const finalAPI = `${url}/${api}`
   if (!token) {
     console.error("No token found. User might not be authenticated.");
     window.location.href = "/login/login"; // Redirect to login page
   }
 
   try {
-    const response = await fetch(api, {
+    const response = await fetch(finalAPI, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -76,7 +81,7 @@ async function sendProtectedPost(api, information) {
 async function isAuthenticated(token) {
   if (token) {
     const response = await getProtectedData(
-      "http://localhost:3000/api/protected",
+      `${url}/api/protected`,
     );
     return response.success;
   }
