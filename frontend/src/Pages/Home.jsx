@@ -13,7 +13,6 @@ import {
 function Home() {
   const { id } = useParams();
   const navigate = useNavigate();
-  console.log(id);
 
   const [users, setUsers] = useState([]);
   const [conversations, setConversations] = useState([]);

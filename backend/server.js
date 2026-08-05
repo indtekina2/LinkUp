@@ -2,7 +2,7 @@ const express = require("express");
 const register = require("./controllers/Register");
 const connectDB = require("./config/db");
 const login = require("./controllers/Login");
-const aunthenticateToken = require("./middleware/authMiddleware");
+const authenticateToken = require("./middleware/authMiddleware");
 const createGroup = require("./controllers/new-group");
 const {joinGroup, joinConversation} = require("./controllers/join-convo");
 const { sendMessage } = require("./controllers/sendMessage");
@@ -23,7 +23,6 @@ connectDB();
 
 // black box for me...
 const cors = require("cors");
-const authenticateToken = require("./middleware/authMiddleware");
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -34,7 +33,7 @@ app.post("/api/signup", register);
 
 app.post("/api/login", login);
 
-app.get("/api/protected", aunthenticateToken, (req, res) => {
+app.get("/api/protected", authenticateToken, (req, res) => {
   res.json({
     message: "This is from a protected route",
     userId: req.user.id,
@@ -42,15 +41,15 @@ app.get("/api/protected", aunthenticateToken, (req, res) => {
   });
 });
 
-app.post("/api/create-group", aunthenticateToken, createGroup);
+app.post("/api/create-group", authenticateToken, createGroup);
 
-app.post("/api/join-group", aunthenticateToken, joinGroup);
+app.post("/api/join-group", authenticateToken, joinGroup);
 
-app.post("/api/join-conversation", aunthenticateToken, joinConversation);
+app.post("/api/join-conversation", authenticateToken, joinConversation);
 
-app.post("/api/messages/send", aunthenticateToken, sendMessage);
+app.post("/api/messages/send", authenticateToken, sendMessage);
 
-app.get("/api/current-user", aunthenticateToken, currentUser);
+app.get("/api/current-user", authenticateToken, currentUser);
 
 app.post("/api/users", authenticateToken, getAllUser)
 

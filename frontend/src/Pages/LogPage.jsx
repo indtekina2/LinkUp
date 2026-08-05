@@ -4,6 +4,7 @@ import "./LogPage.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { sendPost, sendProtectedPost } from "../utils/API";
+import { getCurrentUserData } from "../assets/data";
 
 function LogPage() {
   const [name, SetName] = useState("");

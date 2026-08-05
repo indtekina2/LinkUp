@@ -15,8 +15,8 @@ function Messages({
   const navigate = useNavigate();
 
   // Find the selected conversation
-  console.log("Route id:", id);
-  console.log("Conversations:", conversations);
+  // console.log("Route id:", id);
+  // console.log("Conversations:", conversations);
   const convo = conversations.find((conversation) => conversation.id === id);
 
   // Get the chat name

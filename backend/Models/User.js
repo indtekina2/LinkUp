@@ -13,9 +13,9 @@ const userSchema = new mongoose.Schema({
     minlength: 4,
   },
 
-  conversations: {
-    type: Array,
-  },
+  conversations: [{
+    type: String,
+  }],
 });
 
 

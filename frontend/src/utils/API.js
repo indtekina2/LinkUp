@@ -64,7 +64,7 @@ async function sendProtectedPost(api, information) {
     const data = await response.json();
     console.log(data);
     if (!data.success) {
-      alert(data.message);
+      console.log(data.message);
     }
     return data;
   } catch (error) {
