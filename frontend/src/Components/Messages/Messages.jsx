@@ -39,7 +39,7 @@ function Messages({
     return () => {
       socket.off("new-message");
     };
-  }, []);
+  }, [id]);
 
   // Get the chat name
   const getChatName = () => {

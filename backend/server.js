@@ -91,9 +91,12 @@ app.post("/api/conversations", authenticateToken, getCoversations);
 io.on("connection", (socket) => {
   console.log(`${socket.user.id} connected`);
 
-  socket.on("join-conversation", (convoID) => {
+  socket.on("join-conversation", async (convoID) => {
+  const conversation = await Conversation.findById(convoID);
+  if (conversation && conversation.participants.includes(socket.user.id)) {
     socket.join(convoID);
-  });
+  }
+});
 
   socket.on("send-message", async (data) => {
     console.log(data)
