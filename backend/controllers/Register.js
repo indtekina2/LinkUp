@@ -40,7 +40,6 @@ async function register(req, res) {
       token: token
     });
   } catch (err) {
-    returnStatement.success = false;
     if (err.code === 11000) {
       return res.status(409).json({
         success: false,

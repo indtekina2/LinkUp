@@ -64,19 +64,15 @@ async function joinConversation(req, res) {
         }
 
         // creating the conversation name based on the two participants' ids
-        const conversationName1 = [userId, secondParticipant._id].sort().join("-");
-        const conversationName2 = [secondParticipant._id, userId].sort().join("-");
+        const conversationName = [userId, secondParticipant._id].sort().join("-");
 
         // checking if the conversation already exists
-        let conversation = await Conversation.findOne({ name: conversationName1 });
-        if (!conversation) {
-            conversation = await Conversation.findOne({ name: conversationName2 });
-        }
+        let conversation = await Conversation.findOne({ name: conversationName });
         if (!conversation) {
             // Create a new conversation if it doesn't exist
             conversation = new Conversation({
                 isGroup: false,
-                name: conversationName1,
+                name: conversationName,
                 participants: [userId, secondParticipant._id],
             });
             await conversation.save();
