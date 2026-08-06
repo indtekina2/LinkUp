@@ -27,7 +27,7 @@ function Home() {
     if (!currentUser) return;
 
     const usersData = await getAllUsers(currentUser.participants);
-    console.log(currentUser.conversations);
+    // console.log(currentUser.conversations);
 
     const conversationsData = await Promise.all(
       currentUser.conversations.map((id) => getConversation(id)),

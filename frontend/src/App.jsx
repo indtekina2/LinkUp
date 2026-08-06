@@ -15,7 +15,6 @@ function App() {
   useEffect(() => {
     async function checkAuth() {
       const token = localStorage.getItem("token");
-      console.log(token);
       
       const auth = await isAuthenticated(token);
       console.log(auth);

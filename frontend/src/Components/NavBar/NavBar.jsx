@@ -35,7 +35,7 @@ function NavBar() {
     e.preventDefault();
     // console.log("Searching for..", name);
     const response = await sendProtectedPost("api/join-conversation", {name})
-    console.log(response)
+    // console.log(response)
     if(!response.success){
       alert(response.message)
       return;

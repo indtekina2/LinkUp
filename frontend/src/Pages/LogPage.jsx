@@ -12,6 +12,7 @@ function LogPage() {
   const navigate = useNavigate();
 
   const work = useParams().work;
+  console.log(work)
 
   const information = {
     name: null,
@@ -33,7 +34,7 @@ function LogPage() {
 
     information.name = name;
     information.password = password;
-    console.log("Logging in with:", information);
+    // console.log("Logging in with:", information);
 
     try {
       const data = await sendPost("api/login", {
@@ -42,7 +43,7 @@ function LogPage() {
       });
 
       if (data.success) {
-        console.log(data.token);
+        // console.log(data.token);
         localStorage.setItem("token", data.token);
 
         // add the current user to the users array
@@ -73,10 +74,10 @@ function LogPage() {
         password: information.password,
       });
 
-      console.log(data.success);
+      // console.log(data.success);
 
       if (data.success) {
-        console.log(data.id);
+        // console.log(data.id);
         localStorage.setItem("token", data.token);
 
         getCurrentUserData().then((response) => {
@@ -98,7 +99,7 @@ function LogPage() {
 
     information.name = name;
     information.password = password;
-    console.log("Creating new group with:", information);
+    // console.log("Creating new group with:", information);
 
     // Send a POST request to the backend to create a new group
     try {
@@ -126,7 +127,7 @@ function LogPage() {
     information.name = name;
     information.password = password;
 
-    console.log("Joining group with:", information);
+    // console.log("Joining group with:", information);
 
     // Send a POST request to the backend to join an existing group
     try {
@@ -134,9 +135,9 @@ function LogPage() {
         "api/join-group",
         information,
       );
-      console.log(protectedData);
+      // console.log(protectedData);
       if (protectedData.success) {
-        console.log(protectedData.message);
+        // console.log(protectedData.message);
         navigate("/home");
       } else if (!protectedData.success) {
         alert(protectedData.message);

@@ -7,7 +7,7 @@ async function getCurrentUserData() {
       "api/current-user",
     );
     if (data.success) {
-      console.log("Current user data:", data.user);
+      // console.log("Current user data:", data.user);
       return data.user;
     } else {
       console.error("Failed to fetch current user data:", data.message);
@@ -26,7 +26,6 @@ async function getAllUsers(ids) {
       ids,
     });
     if (data.success) {
-      console.log("All users data:", data.users);
       return data.users;
     } else {
       console.error("Failed to fetch all users data:", data.message);
@@ -46,7 +45,6 @@ async function getConversation(convoId) {
       { convoId },
     );
     if (data.success) {
-      console.log("All conversations data:", data.conversations);
       return data.data;
     } else {
       console.error("Failed to fetch all conversations data:", data.message);
