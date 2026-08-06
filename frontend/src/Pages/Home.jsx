@@ -9,6 +9,7 @@ import {
   getAllUsers,
   getConversation,
 } from "../assets/data";
+import { socket } from "../socket";
 
 function Home() {
   const { id } = useParams();
@@ -37,12 +38,18 @@ function Home() {
   }
 
   useEffect(() => {
+      conversations.forEach((conversation) => {
+        socket.emit("join-conversation", conversation.id);
+      });
+  }, [conversations]);
+
+  useEffect(() => {
     async function fetchData() {
       await loadData();
     }
 
     fetchData();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (id === undefined) {

@@ -3,6 +3,8 @@ import "./NavBar.css";
 import { useEffect, useState } from "react";
 import { sendProtectedPost } from "../../utils/API";
 import { useNavigate } from "react-router-dom";
+import { socket } from "../../socket";
+import { getCurrentUserId } from "../../utils/API";
 
 function NavBar() {
   const [darkMode, setDarkMode] = useState(false);
@@ -34,6 +36,13 @@ function NavBar() {
     // console.log("Searching for..", name);
     const response = await sendProtectedPost("api/join-conversation", {name})
     console.log(response)
+    if(!response.success){
+      alert(response.message)
+      return;
+    }
+    // console.log(socket.connected);
+    socket.emit("get-conversation", {message: "hello"})
+    socket.emit("join-conversation", response.conversation._id);
     navigate(`/home/${response.conversation._id}`)
   }
 

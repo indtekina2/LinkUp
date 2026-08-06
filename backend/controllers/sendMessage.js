@@ -18,7 +18,7 @@ async function saveMessage( { convoID, message, sender } ) {
         convoID,
         sender: sender,
         message: message,
-        timestamp: new Date().toDateString(),
+        timestamp: new Date(),
       });
       await newMessage.save();
       return newMessage;

@@ -42,7 +42,7 @@ async function createGroup(req, res) {
       message: "Group created successfully.",
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(500).json({
       success: false,

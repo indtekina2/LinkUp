@@ -22,7 +22,6 @@ function Messages({
   const convo = conversations.find((conversation) => conversation.id === id);
 
   useEffect(() => {
-    socket.emit("join-conversation", id);
     socket.on("new-message", (savedMessage) => {
       setConversations((prev) =>
         prev.map((conversation) =>
@@ -35,7 +34,6 @@ function Messages({
         ),
       );
     });
-
     return () => {
       socket.off("new-message");
     };

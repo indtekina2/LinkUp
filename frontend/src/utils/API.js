@@ -81,12 +81,13 @@ async function sendProtectedPost(api, information) {
 async function isAuthenticated(token) {
   if (token) {
     const response = await getProtectedData(
-      `${url}/api/protected`,
+      `api/protected`,
     );
     return response.success;
   }
   return false;
 }
+
 function getCurrentUserId() {
   const token = localStorage.getItem("token");
   if (!token) return null;

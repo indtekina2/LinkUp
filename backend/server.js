@@ -15,7 +15,7 @@ const getCoversations = require("./controllers/getConversations");
 
 const { currentUser, getAllUser } = require("./controllers/userInfo");
 
-
+const Conversation = require("./Models/Conversation");
 const app = express();
 const port = process.env.PORT;
 
@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
 
 // verifying the user in socket
 io.use((socket, next) => {
-  console.log("Auth received:", socket.handshake.auth);
+  // console.log("Auth received:", socket.handshake.auth);
   const token = socket.handshake.auth?.token;
 
   if (!token) {
@@ -89,17 +89,17 @@ app.post("/api/users", authenticateToken, getAllUser);
 app.post("/api/conversations", authenticateToken, getCoversations);
 
 io.on("connection", (socket) => {
-  console.log(`${socket.user.id} connected`);
+  // console.log(`${socket.user.id} connected`);
 
   socket.on("join-conversation", async (convoID) => {
-  const conversation = await Conversation.findById(convoID);
-  if (conversation && conversation.participants.includes(socket.user.id)) {
-    socket.join(convoID);
-  }
-});
+    const conversation = await Conversation.findById(convoID);
+    if (conversation && conversation.participants.includes(socket.user.id)) {
+      socket.join(convoID);
+    }
+  });
 
   socket.on("send-message", async (data) => {
-    console.log(data)
+    // console.log(data);
     try {
       const savedMessage = await saveMessage({
         convoID: data.convoID,
