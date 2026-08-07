@@ -23,11 +23,12 @@ function initializeSocket(io) {
     console.log(`${socket.user.username} connected`);
 
     // Marking them as online
-    online(socket);
+    online(socket, io);
 
     socket.on("isOnline", (id) => {
-      socket.emit("status_info", onlineUsers.has(id));
-    });
+    socket.emit("status_info", { userId: id, isOnline: onlineUsers.has(id) });
+  });
+
 
     socket.on("join-conversation", async (convoID) => {
       const conversation = await Conversation.findById(convoID);
@@ -39,20 +40,26 @@ function initializeSocket(io) {
 
     socket.on("send-message", async (data) => {
       try {
+        const conversation = await Conversation.findById(data.convoID);
+        if (
+          !conversation ||
+          !conversation.participants.includes(socket.user.id)
+        ) {
+          return;
+        }
         const savedMessage = await saveMessage({
           convoID: data.convoID,
           message: data.message,
           sender: socket.user.id,
         });
-
         io.to(data.convoID).emit("new-message", savedMessage);
       } catch (err) {
         console.error(err);
       }
+    });
 
-      socket.on("disconnect", () => {
-        offline(socket);
-      });
+    socket.on("disconnect", () => {
+      offline(socket, io);
     });
   });
 }

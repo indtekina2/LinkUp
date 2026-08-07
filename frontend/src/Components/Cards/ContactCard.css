@@ -127,31 +127,14 @@
   font-weight: 500;
 }
 
+.sts_online{
+  color: var(--primaryColor);
+}
+
 /* Status Indicator */
 .status-indicator {
   flex-shrink: 0;
   margin-left: 8px;
-}
-
-.online-dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background: var(--success);
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 1;
-  }
 }
 
 /* Responsive */

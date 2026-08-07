@@ -14,7 +14,7 @@ function ContactCard({
   const [onlineStatus, setOnlineStatus] = useState({
     isOnline: null,
     indicatorText: "",
-    classIndicator: ""
+    classIndicator: "",
   });
 
   function openUser() {
@@ -119,35 +119,44 @@ function ContactCard({
 
   // Online indicator effect
   useEffect(() => {
-    // Only set up socket listeners for private chats
-    if (!conversation.isGroup) {
-      // Handler for online status updates
-      const handleStatusInfo = (isOnline) => {
-        setOnlineStatus({
-          isOnline,
-          indicatorText: isOnline ? "online" : "offline",
-          classIndicator: isOnline ? "online" : "offline"
-        });
-      };
-
-      socket.on("status_info", handleStatusInfo);
-      
-      // Request online status for this conversation
-      socket.emit("isOnline", conversation.id);
-
-      // Cleanup
-      return () => {
-        socket.off("status_info", handleStatusInfo);
-      };
-    } else {
-      // For group chats, reset online status
+    if (conversation.isGroup) {
       setOnlineStatus({
         isOnline: null,
         indicatorText: "",
-        classIndicator: ""
+        classIndicator: "",
       });
+      return;
     }
-  }, [conversation.id, conversation.isGroup]); // Add proper dependencies
+
+    const otherUserId = getOtherParticipant(
+      conversation.participants,
+      currentUserId,
+    );
+
+    const applyStatus = (isOnline) => {
+      setOnlineStatus({
+        isOnline,
+        indicatorText: isOnline ? "online" : "offline",
+        classIndicator: isOnline ? "sts_online" : "sts_offline",
+      });
+    };
+
+    const handleStatusInfo = ({ userId, isOnline }) => {
+      if (userId === otherUserId) applyStatus(isOnline);
+    };
+
+    socket.on("status_info", handleStatusInfo);
+    socket.emit("isOnline", otherUserId); // initial poll on mount, still needed
+
+    return () => {
+      socket.off("status_info", handleStatusInfo);
+    };
+  }, [
+    conversation.id,
+    conversation.isGroup,
+    conversation.participants,
+    currentUserId,
+  ]);
 
   // Get display name
   const getDisplayName = () => {
@@ -181,7 +190,8 @@ function ContactCard({
   };
 
   // Determine if we should show the online indicator
-  const showOnlineIndicator = !conversation.isGroup && onlineStatus.isOnline !== null;
+  const showOnlineIndicator =
+    !conversation.isGroup && onlineStatus.isOnline !== null;
 
   return (
     <div
