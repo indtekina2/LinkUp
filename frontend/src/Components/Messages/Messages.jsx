@@ -22,8 +22,14 @@ function Messages({
   const convo = conversations.find((conversation) => conversation.id === id);
   // console.log(convo);
 
+  const markSeenIfNeeded = (message) => {
+    if (message.sender !== getCurrentUserId() && message.receipt !== "seen") {
+      socket.emit("message_seen", { messageId: message._id });
+    }
+  };
+
   useEffect(() => {
-    socket.on("new-message", (savedMessage) => {
+    const handleNewMessage = (savedMessage) => {
       setConversations((prev) =>
         prev.map((conversation) =>
           conversation.id === savedMessage.convoID
@@ -34,9 +40,39 @@ function Messages({
             : conversation,
         ),
       );
-    });
+      markSeenIfNeeded(savedMessage);
+    };
+
+    const handleMessageSeen = ({ messageId, receipt }) => {
+      setConversations((prev) =>
+        prev.map((conversation) => ({
+          ...conversation,
+          messages: conversation.messages.map((m) =>
+            m._id === messageId ? { ...m, receipt } : m,
+          ),
+        })),
+      );
+    };
+
+    socket.on("new-message", handleNewMessage);
+    socket.on("get_message_seen", handleMessageSeen);
+
+    if (convo) {
+      convo.messages.forEach((message) => {
+        if (
+          message.sender !== getCurrentUserId() &&
+          message.receipt !== "seen"
+        ) {
+          socket.emit("message_seen", {
+            messageId: message._id,
+          });
+        }
+      });
+    }
+
     return () => {
-      socket.off("new-message");
+      socket.off("new-message", handleNewMessage);
+      socket.off("get_message_seen", handleMessageSeen);
     };
   }, [id]);
 
@@ -102,6 +138,17 @@ function Messages({
       message: inputText,
       timestamp: new Date().toISOString(),
     };
+
+    setConversations((prev) =>
+      prev.map((conversation) =>
+        conversation.id === newMessage.convoID
+          ? {
+              ...conversation,
+              messages: [...conversation.messages, newMessage],
+            }
+          : conversation,
+      ),
+    );
 
     try {
       socket.emit("send-message", {
@@ -180,8 +227,15 @@ function Messages({
 
                   <div className="message-text">{msg.message}</div>
 
-                  <div className="message-time">
-                    {formatTime(msg.timestamp)}
+                  <div className="subMsgInfo">
+                    <div className="message-time">
+                      {formatTime(msg.timestamp)}
+                    </div>
+                    {isCurrentUser && (
+                      <div className={`message-receipt ${msg.receipt === "seen" ? msg.receipt : "sent"}`}>
+                        {msg.receipt === "seen" ? "✓✓" : "✓"}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

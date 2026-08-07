@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../Models/User");
 const Conversation = require("../Models/Conversation");
+const Message = require("../Models/Message");
 const { saveMessage } = require("../controllers/sendMessage");
 const checkToken = require("../utils/checkToken");
 const { online, offline, onlineUsers } = require("./status");
@@ -26,9 +27,8 @@ function initializeSocket(io) {
     online(socket, io);
 
     socket.on("isOnline", (id) => {
-    socket.emit("status_info", { userId: id, isOnline: onlineUsers.has(id) });
-  });
-
+      socket.emit("status_info", { userId: id, isOnline: onlineUsers.has(id) });
+    });
 
     socket.on("join-conversation", async (convoID) => {
       const conversation = await Conversation.findById(convoID);
@@ -38,8 +38,10 @@ function initializeSocket(io) {
       }
     });
 
+    // Sending the information to everyone
     socket.on("send-message", async (data) => {
       try {
+        // I don't know why I am adding this extra line of codes... SaveMessage already checks these conditions...
         const conversation = await Conversation.findById(data.convoID);
         if (
           !conversation ||
@@ -56,6 +58,32 @@ function initializeSocket(io) {
       } catch (err) {
         console.error(err);
       }
+    });
+
+    // Client sees the message...
+    socket.on("message_seen", async (data) => {
+      const message = await Message.findById(data.messageId);
+
+      if (!message) {
+        return;
+      }
+
+      const conversation = await Conversation.findById(message.convoID);
+
+      if (
+        !conversation ||
+        !conversation.participants.includes(socket.user.id)
+      ) {
+        return;
+      }
+
+      message.receipt = "seen";
+      await message.save();
+
+      io.to(message.convoID.toString()).emit("get_message_seen", {
+        messageId: message._id,
+        receipt: message.receipt,
+      });
     });
 
     socket.on("disconnect", () => {

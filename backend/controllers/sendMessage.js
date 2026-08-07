@@ -13,12 +13,16 @@ async function saveMessage( { convoID, message, sender } ) {
     }
     // if the user exists in the convo
     else if (conversation.participants.includes(sender)) {
+      // saved/delivered to the database... For only private converations
+      const receipt = conversation.isGroup? "" : "Delivered";
+
       // Create a new message
       const newMessage = new Message({
         convoID,
         sender: sender,
         message: message,
         timestamp: new Date(),
+        receipt: receipt
       });
       await newMessage.save();
       return newMessage;

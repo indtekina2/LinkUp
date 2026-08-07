@@ -1,16 +1,31 @@
 const Conversation = require("../Models/Conversation");
 
-const onlineUsers = new Set();
+const onlineUsers = new Map();
 
-async function online(socket, io) {
-  onlineUsers.add(socket.user.id);
-  socket.join(socket.user.id); // personal room, keyed by user ID
-  await broadcastStatus(socket.user.id, true, io);
+function online(socket, io) {
+  const userId = socket.user.id;
+
+  const count = onlineUsers.get(userId) || 0;
+  onlineUsers.set(userId, count + 1);
+
+  if (count === 0) {
+    broadcastStatus(userId, true, io);
+  }
+
+  socket.join(userId);
 }
 
 async function offline(socket, io) {
-  onlineUsers.delete(socket.user.id);
-  await broadcastStatus(socket.user.id, false, io);
+  const userId = socket.user.id;
+
+  const count = onlineUsers.get(userId) || 0;
+
+  if (count <= 1) {
+    onlineUsers.delete(userId);
+    await broadcastStatus(userId, false, io);
+  } else {
+    onlineUsers.set(userId, count - 1);
+  }
 }
 
 async function broadcastStatus(userId, isOnline, io) {
