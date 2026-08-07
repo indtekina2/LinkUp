@@ -1,10 +1,21 @@
-import React from "react";
-import "./ContactCard.css"
+import React, { useState, useEffect } from "react";
+import "./ContactCard.css";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUserId } from "../../utils/API";
+import { socket } from "../../socket";
 
-function ContactCard({ users, conversation, currentUserId = getCurrentUserId(), style}) {
+function ContactCard({
+  users,
+  conversation,
+  currentUserId = getCurrentUserId(),
+  style,
+}) {
   const navigate = useNavigate();
+  const [onlineStatus, setOnlineStatus] = useState({
+    isOnline: null,
+    indicatorText: "",
+    classIndicator: ""
+  });
 
   function openUser() {
     navigate(`/home/${conversation.id}`);
@@ -31,7 +42,7 @@ function ContactCard({ users, conversation, currentUserId = getCurrentUserId(), 
   // Get the last message
   const getLastMessage = (messages) => {
     if (!messages || messages.length === 0) {
-      return { message: "No messages yet", sender: null };
+      return { message: "No messages yet", sender: null, timestamp: null };
     }
     return messages.reduce((latest, current) => {
       return new Date(current.timestamp) > new Date(latest.timestamp)
@@ -106,6 +117,38 @@ function ContactCard({ users, conversation, currentUserId = getCurrentUserId(), 
     }
   };
 
+  // Online indicator effect
+  useEffect(() => {
+    // Only set up socket listeners for private chats
+    if (!conversation.isGroup) {
+      // Handler for online status updates
+      const handleStatusInfo = (isOnline) => {
+        setOnlineStatus({
+          isOnline,
+          indicatorText: isOnline ? "online" : "offline",
+          classIndicator: isOnline ? "online" : "offline"
+        });
+      };
+
+      socket.on("status_info", handleStatusInfo);
+      
+      // Request online status for this conversation
+      socket.emit("isOnline", conversation.id);
+
+      // Cleanup
+      return () => {
+        socket.off("status_info", handleStatusInfo);
+      };
+    } else {
+      // For group chats, reset online status
+      setOnlineStatus({
+        isOnline: null,
+        indicatorText: "",
+        classIndicator: ""
+      });
+    }
+  }, [conversation.id, conversation.isGroup]); // Add proper dependencies
+
   // Get display name
   const getDisplayName = () => {
     const currentUser = currentUserId;
@@ -137,11 +180,21 @@ function ContactCard({ users, conversation, currentUserId = getCurrentUserId(), 
     return getUsername(senderId);
   };
 
+  // Determine if we should show the online indicator
+  const showOnlineIndicator = !conversation.isGroup && onlineStatus.isOnline !== null;
+
   return (
-    <div className={`Contact_Card ${className}`} onClick={openUser} style={style}>
+    <div
+      className={`Contact_Card ${className}`}
+      onClick={openUser}
+      style={style}
+    >
       {/* Avatar / Text Logo */}
       <div className="avatar">
         <span className="text-logo">{getTextLogo()}</span>
+        {showOnlineIndicator && (
+          <span className={`online-dot ${onlineStatus.classIndicator}`} />
+        )}
       </div>
 
       {/* Content */}
@@ -164,8 +217,11 @@ function ContactCard({ users, conversation, currentUserId = getCurrentUserId(), 
               {lastMessage.message}
             </p>
           )}
-          {!isParticipant && (
-            <span className="not-participant-badge">Not a participant</span>
+
+          {showOnlineIndicator && (
+            <span className={`badge ${onlineStatus.classIndicator}`}>
+              {onlineStatus.indicatorText}
+            </span>
           )}
         </div>
       </div>

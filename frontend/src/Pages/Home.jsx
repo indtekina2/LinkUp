@@ -49,7 +49,7 @@ function Home() {
     }
 
     fetchData();
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     if (id === undefined) {

@@ -36,6 +36,8 @@ function Contacts({ visibilityClass, users, conversations }) {
     return timeB - timeA; // Descending order
   });
 
+  console.log(sortedConversations)
+
   return (
     <div className={`Contacts_Container ${visibilityClass}`}>
       <div className="Contacts_Header">

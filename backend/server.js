@@ -12,10 +12,12 @@ const createGroup = require("./controllers/new-group");
 const { joinGroup, joinConversation } = require("./controllers/join-convo");
 const { sendMessage, saveMessage } = require("./controllers/sendMessage");
 const getCoversations = require("./controllers/getConversations");
-
 const { currentUser, getAllUser } = require("./controllers/userInfo");
+const initializeSocket = require("./sockets/index")
 
+const User = require("./Models/User");
 const Conversation = require("./Models/Conversation");
+
 const app = express();
 const port = process.env.PORT;
 
@@ -40,26 +42,6 @@ app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("information");
-});
-
-// verifying the user in socket
-io.use((socket, next) => {
-  // console.log("Auth received:", socket.handshake.auth);
-  const token = socket.handshake.auth?.token;
-
-  if (!token) {
-    return next(new Error("No token provided"));
-  }
-
-  try {
-    const user = jwt.verify(token, process.env.JWT_SECRET);
-
-    socket.user = user;
-
-    next();
-  } catch (err) {
-    next(new Error("Invalid token"));
-  }
 });
 
 app.post("/api/signup", register);
@@ -88,35 +70,6 @@ app.post("/api/users", authenticateToken, getAllUser);
 
 app.post("/api/conversations", authenticateToken, getCoversations);
 
-io.on("connection", (socket) => {
-  // console.log(`${socket.user.id} connected`);
-
-  socket.on("join-conversation", async (convoID) => {
-    const conversation = await Conversation.findById(convoID);
-    if (conversation && conversation.participants.includes(socket.user.id)) {
-      socket.join(convoID);
-    }
-  });
-
-  socket.on("send-message", async (data) => {
-    // console.log(data);
-    try {
-      const savedMessage = await saveMessage({
-        convoID: data.convoID,
-        message: data.message,
-        sender: socket.user.id,
-      });
-
-      io.to(data.convoID).emit("new-message", savedMessage);
-
-      return { success: true };
-    } catch (err) {
-      return {
-        success: false,
-        message: err.message,
-      };
-    }
-  });
-});
+initializeSocket(io)
 
 server.listen(port);
