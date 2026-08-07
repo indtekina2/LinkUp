@@ -12,7 +12,12 @@ function LogPage() {
   const navigate = useNavigate();
 
   const work = useParams().work;
-  console.log(work)
+
+  const workValues = ["login", "new-group", "join-group"];
+  console.log(workValues.includes(work))
+  if (!work) {
+    navigate("/login/login");
+  }
 
   const information = {
     name: null,
@@ -47,9 +52,9 @@ function LogPage() {
         localStorage.setItem("token", data.token);
 
         // add the current user to the users array
-        getCurrentUserData().then(response=>{
+        getCurrentUserData().then((response) => {
           console.log(response);
-        })
+        });
 
         navigate("/home");
       } else {
@@ -150,16 +155,22 @@ function LogPage() {
   // Setting header and subheader text
   let header_container;
   let headerText, subHeaderText;
-  if (work === "login") {
-    headerText = "Welcome Back";
-    subHeaderText = "Sign in to your account";
-    header_container = "header-container_login";
-  } else if (work === "new-group" || work === "join-group") {
-    headerText = "Create or Join a Group";
-    subHeaderText = "Sign in to your group account";
-    header_container = "header-container_group";
-  } else {
-    console.error("Invalid work prop value:", work);
+  let passwordText, inputText;
+
+  switch (work) {
+    case "login":
+      headerText = "Welcome Back";
+      subHeaderText = "Sign in to your account";
+      inputText = "username";
+      passwordText = "Enter Your password";
+      header_container = "header-container_login";
+      break;
+    default:
+      headerText = "Create or Join a Group";
+      subHeaderText = "Sign in to your group account";
+      inputText = "Group Name";
+      passwordText = "Enter Your Group password";
+      header_container = "header-container_group";
   }
 
   return (
@@ -183,17 +194,11 @@ function LogPage() {
 
         <form className="login-form">
           <div className="form-group">
-            <label htmlFor="username">
-              {work === "login" ? "Username" : "Group Name"}
-            </label>
+            <label htmlFor="username">{inputText}</label>
             <input
               type="text"
               id="username"
-              placeholder={
-                work === "login"
-                  ? "Enter your username"
-                  : "Enter your group name"
-              }
+              placeholder={`Enter Your ${inputText}`}
               value={name}
               onChange={(e) => SetName(e.target.value)}
               required
@@ -205,11 +210,7 @@ function LogPage() {
             <input
               type="password"
               id="password"
-              placeholder={
-                work === "login"
-                  ? "Enter your password"
-                  : "Enter your group password"
-              }
+              placeholder={passwordText}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -248,7 +249,7 @@ function LogPage() {
             }
           >
             {work === "login"
-              ? "Sign In"
+              ? "Sign Up"
               : work === "new-group"
                 ? "Join Existing Group"
                 : "Create New Group"}

@@ -67,7 +67,7 @@ async function sendProtectedPost(api, information) {
     });
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     if (!data.success) {
       console.log(data.message);
     }

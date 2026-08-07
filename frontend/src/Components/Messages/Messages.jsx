@@ -20,6 +20,7 @@ function Messages({
   // console.log("Route id:", id);
   // console.log("Conversations:", conversations);
   const convo = conversations.find((conversation) => conversation.id === id);
+  // console.log(convo);
 
   useEffect(() => {
     socket.on("new-message", (savedMessage) => {

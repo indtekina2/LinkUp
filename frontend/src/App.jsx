@@ -7,6 +7,7 @@ import LogPage from "./Pages/LogPage";
 import NavBar from "./Components/NavBar/NavBar.jsx";
 import Home from "./Pages/Home";
 import { socket } from "./socket.js";
+import RedirectClient from "./Pages/RedirectClient.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -17,9 +18,10 @@ function App() {
       const token = localStorage.getItem("token");
       
       const auth = await isAuthenticated(token);
-      console.log(auth);
+      // console.log(auth);
 
       if (!auth) {
+        localStorage.setItem("token", "")
         navigate("/login/login");
         return;
       }
@@ -45,6 +47,7 @@ function App() {
       <Routes>
         <Route path="/login/:work" element={<LogPage />} />
         <Route path="/home/:id?" element={<Home />} />
+        <Route path="*" element={<RedirectClient />}/>
       </Routes>
     </>
   );
