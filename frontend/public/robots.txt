@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://link-up-indtekina.vercel.app/sitemap.xml
