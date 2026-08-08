@@ -139,17 +139,6 @@ function Messages({
       timestamp: new Date().toISOString(),
     };
 
-    setConversations((prev) =>
-      prev.map((conversation) =>
-        conversation.id === newMessage.convoID
-          ? {
-              ...conversation,
-              messages: [...conversation.messages, newMessage],
-            }
-          : conversation,
-      ),
-    );
-
     try {
       socket.emit("send-message", {
         convoID: newMessage.convoID,
